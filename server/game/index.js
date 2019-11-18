@@ -173,6 +173,9 @@ class Game {
       while (this.stack.length) {
         player.hand.unshift(this.stack.pop())
       }
+      let current = this.currentPlayer().socketId
+      this.dequeue(current)
+      this.queue(this.getPlayer(current))
     } else if (player.hand.length) {
       let burnCard = player.hand.pop()
       this.log(
