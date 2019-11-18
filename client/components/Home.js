@@ -73,14 +73,14 @@ class Home extends React.Component {
               Slap!
             </button>
           )}
-          {this.state.players.length >= 2 &&
-            !this.state.start && (
-              <button type="button" onClick={() => socket.emit('start')}>
-                Start!
-              </button>
-            )}
+          {this.state.players.length >= 2 && !this.state.start && (
+            <button type="button" onClick={() => socket.emit('start')}>
+              Start!
+            </button>
+          )}
         </div>
-        <ol>
+        <ol id="log">
+          Log:
           {this.state.messages.length
             ? this.state.messages.map(msg => {
                 return <li key={msg.id}>{msg.message}</li>
