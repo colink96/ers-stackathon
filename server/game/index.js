@@ -147,7 +147,7 @@ class Game {
       while (this.stack.length) {
         player.hand.unshift(this.stack.pop())
       }
-    } else {
+    } else if (player.hand.length) {
       let burnCard = player.hand.pop()
       this.log(`Player ${player.socketId} burns a card: ${burnCard.value}`)
       this.burn.push(burnCard)
@@ -166,7 +166,7 @@ class Game {
       this.log(`Player ${winner.socketId} wins this round.`)
       this.stack.push(...this.burn)
       this.burn = []
-      winner.hand.push(...this.stack)
+      winner.hand.unshift(...this.stack)
       this.stack = []
     }
     this.players.forEach(player => {
@@ -275,6 +275,16 @@ class Game {
         this.queue(currentPlayer)
       }
     }
+    this.players.forEach(player => {
+      if (
+        !this.turnQueue
+          .map(queue => queue.socketId)
+          .includes(player.socketId) &&
+        player.hand.length > 0
+      ) {
+        this.queue(player)
+      }
+    })
   }
 
   playCard() {
