@@ -42,15 +42,7 @@ class Home extends React.Component {
           <h1>Rats!</h1>
           <div id="game-info">
             <h2>You are: {this.state.alias}</h2>
-            {this.state.currentPlayer && (
-              <h3>
-                It is{' '}
-                {this.state.currentPlayer.socketId === this.state.user
-                  ? 'your'
-                  : `${this.state.currentPlayer.alias}'s`}{' '}
-                turn!
-              </h3>
-            )}
+
             <h3>Cards in stack: {`${this.state.stack.length} cards`}</h3>
             <h3>Cards burned: {`${this.state.burned} cards`}</h3>
             <div id="players">
@@ -65,6 +57,15 @@ class Home extends React.Component {
         </div>
 
         <div id="game">
+          {this.state.currentPlayer && (
+            <h3>
+              It is{' '}
+              {this.state.currentPlayer.socketId === this.state.user
+                ? 'your'
+                : `${this.state.currentPlayer.alias}'s`}{' '}
+              turn!
+            </h3>
+          )}
           <div className="card-view">
             {this.state.topCard !== 0 && (
               <img src={`./${this.state.topCard.img}.png`} />

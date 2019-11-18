@@ -61,7 +61,7 @@ form div {
   flex: 2;
   justify-items: center;
   flex-direction: column;
-  background-color: #cc998d;
+  background-color: #22223b;
 }
 #players {
   font-size: 14px;
@@ -87,8 +87,10 @@ form div {
 #buttons {
   align-self: center;
   justify-content: space-evenly;
+  padding-bottom: 5%;
 }
 
-#buttons img {
-  width: 50%;
+h3 {
+  align-self: center;
+  text-align: center;
 }

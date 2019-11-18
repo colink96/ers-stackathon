@@ -13,13 +13,13 @@ function Card(value, suit) {
 function getImg(card) {
   let finalStr = ''
   let suit = card.suit.toLowerCase()
-  if (card.value === 11) {
+  if (card.value === 'Jack') {
     finalStr = `jack_of_${suit}2`
-  } else if (card.value === 12) {
+  } else if (card.value === 'Queen') {
     finalStr = `queen_of_${suit}2`
-  } else if (card.value === 13) {
+  } else if (card.value === 'King') {
     finalStr = `king_of_${suit}2`
-  } else if (card.value === 1) {
+  } else if (card.value === 'Ace') {
     finalStr = `ace_of_${suit}`
   } else {
     finalStr = `${card.value}_of_${suit}`
@@ -41,7 +41,7 @@ function Player(socketId) {
 
 function buildDeck() {
   //1 is A, 11 is J, 12 is Q, K is 13
-  let values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+  let values = ['Ace', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'Jack', 'Queen', 'King']
   //1 is Diamonds, 2 is Clubs, 3 is Hearts, 4 is Spades
   let suits = ['Diamonds', 'Clubs', 'Hearts', 'Spades']
   let deck = []
@@ -64,19 +64,19 @@ function isFace(stack) {
     return undefined
   }
   return (
-    stack[stack.length - 1].value === 11 ||
-    stack[stack.length - 1].value === 12 ||
-    stack[stack.length - 1].value === 13 ||
-    stack[stack.length - 1].value === 1
+    stack[stack.length - 1].value === 'Jack' ||
+    stack[stack.length - 1].value === 'Queen' ||
+    stack[stack.length - 1].value === 'King' ||
+    stack[stack.length - 1].value === 'Ace'
   )
 }
 
 function isFaceCard(card) {
   return (
-    card.value === 1 ||
-    card.value === 11 ||
-    card.value === 12 ||
-    card.value === 13
+    card.value === 'Jack' ||
+    card.value === 'Queen' ||
+    card.value === 'King' ||
+    card.value === 'Ace'
   )
 }
 
@@ -96,25 +96,25 @@ class Game {
       return undefined
     } else if (
       this.stack.length - 2 >= 0 &&
-      this.stack[this.stack.length - 2].value === 11
+      this.stack[this.stack.length - 2].value === 'Jack'
     ) {
       return this.stack[this.stack.length - 2].owner
     } else if (
       this.stack.length - 3 >= 0 &&
-      this.stack[this.stack.length - 3].value === 12 &&
+      this.stack[this.stack.length - 3].value === 'Queen' &&
       !isFaceCard(this.stack[this.stack.length - 2])
     ) {
       return this.stack[this.stack.length - 3].owner
     } else if (
       this.stack.length - 4 >= 0 &&
-      this.stack[this.stack.length - 4].value === 13 &&
+      this.stack[this.stack.length - 4].value === 'King' &&
       !isFaceCard(this.stack[this.stack.length - 2]) &&
       !isFaceCard(this.stack[this.stack.length - 3])
     ) {
       return this.stack[this.stack.length - 4].owner
     } else if (
       this.stack.length - 5 >= 0 &&
-      this.stack[this.stack.length - 5].value === 1 &&
+      this.stack[this.stack.length - 5].value === 'Ace' &&
       !isFaceCard(this.stack[this.stack.length - 2]) &&
       !isFaceCard(this.stack[this.stack.length - 3]) &&
       !isFaceCard(this.stack[this.stack.length - 4])
@@ -145,24 +145,36 @@ class Game {
     }
   }
 
-  isValidSlap() {
+  isValidSlap(player) {
+    this.log(`${player.alias} slaps!`)
     let topCard = this.stack[this.stack.length - 1]
     if (!this.stack[this.stack.length - 2]) {
+      this.log(`Invalid sandwich.`)
       return false
     } else if (topCard.value === this.stack[this.stack.length - 2].value) {
+      this.log(
+        `Valid sandwich: ${topCard.value}, ${
+          this.stack[this.stack.length - 2].value
+        }.`
+      )
       return true
     } else if (this.stack[this.stack.length - 3]) {
       if (topCard.value === this.stack[this.stack.length - 3].value) {
+        this.log(
+          `Valid sandwich: ${topCard.value}, ${
+            this.stack[this.stack.length - 2].value
+          }, ${this.stack[this.stack.length - 3].value}.`
+        )
         return true
       }
     } else {
+      this.log(`Invalid sandwich.`)
       return false
     }
   }
 
   slap(player) {
-    if (this.isValidSlap()) {
-      this.log(`${player.alias} slaps`)
+    if (this.isValidSlap(player)) {
       this.stack = this.stack.map(card => {
         card.owner = player.socketId
         return card
@@ -300,14 +312,28 @@ class Game {
       this.queue(this.getPlayer(currentPlayerId))
       let nextPlayer = this.currentPlayer()
       switch (this.stack[this.stack.length - 1].value) {
-        case 12:
+        case 'Jack':
+          this.log(
+            `Jack: ${nextPlayer.alias} has 1 chance to play a face card.`
+          )
+          break
+        case 'Queen':
+          this.log(
+            `Queen: ${nextPlayer.alias} has 2 chances to play a face card.`
+          )
           this.turnQueue.push(nextPlayer)
           break
-        case 13:
+        case 'King':
+          this.log(
+            `King: ${nextPlayer.alias} has 3 chances to play a face card.`
+          )
           this.turnQueue.push(nextPlayer)
           this.turnQueue.push(nextPlayer)
           break
-        case 1:
+        case 'Ace':
+          this.log(
+            `Ace: ${nextPlayer.alias} has 4 chances to play a face card.`
+          )
           this.turnQueue.push(nextPlayer)
           this.turnQueue.push(nextPlayer)
           this.turnQueue.push(nextPlayer)

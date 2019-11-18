@@ -202,7 +202,7 @@ function (_React$Component) {
         id: "header"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Rats!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: "game-info"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "You are: ", this.state.alias), this.state.currentPlayer && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "It is", ' ', this.state.currentPlayer.socketId === this.state.user ? 'your' : "".concat(this.state.currentPlayer.alias, "'s"), ' ', "turn!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Cards in stack: ", "".concat(this.state.stack.length, " cards")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Cards burned: ", "".concat(this.state.burned, " cards")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "You are: ", this.state.alias), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Cards in stack: ", "".concat(this.state.stack.length, " cards")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Cards burned: ", "".concat(this.state.burned, " cards")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: "players"
       }, "Players:", this.state.players.map(function (player) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -210,7 +210,7 @@ function (_React$Component) {
         }, player.alias, " has ", player.hand.length, " cards in their hand!");
       })))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: "game"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, this.state.currentPlayer && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "It is", ' ', this.state.currentPlayer.socketId === this.state.user ? 'your' : "".concat(this.state.currentPlayer.alias, "'s"), ' ', "turn!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card-view"
       }, this.state.topCard !== 0 && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
         src: "./".concat(this.state.topCard.img, ".png")
