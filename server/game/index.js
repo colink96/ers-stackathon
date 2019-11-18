@@ -314,12 +314,17 @@ class Game {
         player.hand.length > 0
       ) {
         this.queue(player)
+      } else if (player.hand.length < 1) {
+        this.dequeue(player.socketId)
       }
     })
-    if (this.burn.length === 52) {
+    if (this.burn.length + this.stack.length === 52) {
       this.end()
     }
     if (!this.turnQueue.length) {
+      this.end()
+    }
+    if (this.turnQueue.length === 1) {
       this.end()
     }
   }
