@@ -239,7 +239,9 @@ function (_React$Component) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
           key: msg.id
         }, "".concat(msg.message));
-      }) : '')));
+      }) : '')), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "howtoplay"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "How to Play"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Egyptian Rat Screw is a card game that tests players' reactions and memory. Each player takes turns playing a card on the stack. If any player plays a face card (Jack, Queen, King, or Ace) the following player in the turn order has a certain number of chances to play a face card (1, 2, 3, and 4, respectively), otherwise the player who played the face card wins the stack."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Alternatively, any player in the game may slap the stack on a valid sandwich. Sandwiches are pairs of identical values (7, 7) or identical values separated by one card (7, A, 7). Valid slaps award the player with all the cards in the stack. The player who manages to accumulate all the cards wins!")));
     }
   }]);
 

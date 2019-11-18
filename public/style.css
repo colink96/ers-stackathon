@@ -94,3 +94,10 @@ h3 {
   align-self: center;
   text-align: center;
 }
+
+#howtoplay {
+  border-radius: 10%;
+  padding: 1%;
+  margin: 5%;
+  background-color: #153b50;
+}
