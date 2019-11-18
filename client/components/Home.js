@@ -43,8 +43,8 @@ class Home extends React.Component {
           <div id="game-info">
             <h2>You are: {this.state.alias}</h2>
 
-            <h3>Cards in stack: {`${this.state.stack.length} cards`}</h3>
-            <h3>Cards burned: {`${this.state.burned} cards`}</h3>
+            <h2>Cards in stack: {`${this.state.stack.length} cards`}</h2>
+            <h2>Cards burned: {`${this.state.burned} cards`}</h2>
             <div id="players">
               Players:
               {this.state.players.map(player => (
