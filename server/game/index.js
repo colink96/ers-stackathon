@@ -1,9 +1,30 @@
 /* eslint-disable no-extend-native */
 /* eslint-disable complexity */
+
+const genAlias = require('../../utils')
+
 function Card(value, suit) {
   this.value = value
   this.suit = suit
   this.owner = null
+  this.img = ''
+}
+
+function getImg(card) {
+  let finalStr = ''
+  let suit = card.suit.toLowerCase()
+  if (card.value === 11) {
+    finalStr = `jack_of_${suit}2`
+  } else if (card.value === 12) {
+    finalStr = `queen_of_${suit}2`
+  } else if (card.value === 13) {
+    finalStr = `king_of_${suit}2`
+  } else if (card.value === 1) {
+    finalStr = `ace_of_${suit}`
+  } else {
+    finalStr = `${card.value}_of_${suit}`
+  }
+  return finalStr
 }
 
 function hash(str) {
@@ -15,6 +36,7 @@ function hash(str) {
 function Player(socketId) {
   this.socketId = socketId
   this.hand = []
+  this.alias = genAlias()
 }
 
 function buildDeck() {
@@ -25,7 +47,10 @@ function buildDeck() {
   let deck = []
   for (let v = 0; v < values.length; v++) {
     for (let s = 0; s < suits.length; s++) {
-      deck.push(new Card(values[v], suits[s]))
+      let newCard = new Card(values[v], suits[s])
+      newCard.img = getImg(newCard)
+      console.log(newCard)
+      deck.push(newCard)
     }
   }
   return deck
@@ -109,7 +134,9 @@ class Game {
     let removed = this.getPlayer(socketId)
     this.burn.push(...removed.hand)
     this.log(
-      `Player ${socketId} has left the game. Their hand has been burned.`
+      `${
+        this.getPlayer(socketId).alias
+      } has left the game. Their hand has been burned.`
     )
     this.dequeue(socketId)
     this.players = this.players.filter(player => player.socketId !== socketId)
@@ -135,13 +162,13 @@ class Game {
   }
 
   slap(player) {
-    this.log(`Player ${player.socketId} slaps`)
+    this.log(`${player.alias} slaps`)
     if (this.isValidSlap()) {
       this.stack = this.stack.map(card => {
         card.owner = player.socketId
         return card
       })
-      this.log(`Player ${player.socketId} wins this round.`)
+      this.log(`${player.alias} wins this round.`)
       this.stack.push(...this.burn)
       this.burn = []
       while (this.stack.length) {
@@ -149,7 +176,11 @@ class Game {
       }
     } else if (player.hand.length) {
       let burnCard = player.hand.pop()
-      this.log(`Player ${player.socketId} burns a card: ${burnCard.value}`)
+      this.log(
+        `${this.getPlayer(player.socketId).alias} burns a card: ${
+          burnCard.value
+        }`
+      )
       this.burn.push(burnCard)
     }
   }
@@ -163,7 +194,7 @@ class Game {
         card.owner = this.checkWinner()
         return card
       })
-      this.log(`Player ${winner.socketId} wins this round.`)
+      this.log(`${winner.alias} wins this round.`)
       this.stack.push(...this.burn)
       this.burn = []
       winner.hand.unshift(...this.stack)
@@ -171,7 +202,7 @@ class Game {
     }
     this.players.forEach(player => {
       if (player.hand.length === 52) {
-        this.log(`${player.socketId} wins the game!`)
+        this.log(`${player.alias} wins the game!`)
         this.end()
       }
     })
@@ -207,12 +238,12 @@ class Game {
       this.log(`Starting game...`)
       this.log(
         `Current players: ${this.players.map(player => {
-          return player.socketId
+          return player.alias
         })}`
       )
-      this.log(`Turn Queue: ${this.turnQueue.map(player => player.socketId)}`)
       this.log('Dealing hands...')
       this.dealHands()
+      this.log('GAME START!')
     }
   }
 
@@ -285,12 +316,18 @@ class Game {
         this.queue(player)
       }
     })
+    if (this.burn.length === 52) {
+      this.end()
+    }
+    if (!this.turnQueue.length) {
+      this.end()
+    }
   }
 
   playCard() {
     this.stack.push(this.currentPlayer().hand.pop())
     this.log(
-      `Player ${this.currentPlayer().socketId} plays a ${
+      `${this.currentPlayer().alias} plays a ${
         this.stack[this.stack.length - 1].value
       } of ${this.stack[this.stack.length - 1].suit}`
     )
@@ -299,7 +336,7 @@ class Game {
   }
 
   log(msg) {
-    this.msgLog.push({message: msg, id: hash(msg)})
+    this.msgLog.push({message: msg, id: Math.random() * 9999})
     if (this.msgLog.length > 30) {
       this.msgLog = this.msgLog.slice(1)
     }

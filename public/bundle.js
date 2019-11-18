@@ -159,10 +159,13 @@ function (_React$Component) {
     _this.state = {
       start: false,
       user: '',
+      alias: '',
       players: [],
       currentPlayer: '',
       topCard: {},
-      messages: []
+      messages: [],
+      stack: [],
+      burned: 0
     };
     return _this;
   }
@@ -172,9 +175,10 @@ function (_React$Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      _socket__WEBPACK_IMPORTED_MODULE_1__["default"].on('user', function (id) {
+      _socket__WEBPACK_IMPORTED_MODULE_1__["default"].on('user', function (info) {
         _this2.setState({
-          user: id
+          user: info.id,
+          alias: info.alias
         });
       });
       _socket__WEBPACK_IMPORTED_MODULE_1__["default"].on('gameinfo', function (game) {
@@ -183,20 +187,36 @@ function (_React$Component) {
           players: game.players,
           currentPlayer: game.currentPlayer,
           topCard: game.topCard,
-          messages: game.messages
+          messages: game.messages,
+          stack: game.stack,
+          burned: game.burned
         });
       });
     }
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "ERS"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        id: "game"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "You are: ", this.state.user), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ol", null, "Players Connected:", this.state.players.map(function (player) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "main"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "header"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Rats!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "game-info"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "You are: ", this.state.alias), this.state.currentPlayer && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "It is", ' ', this.state.currentPlayer.socketId === this.state.user ? 'your' : "".concat(this.state.currentPlayer.alias, "'s"), ' ', "turn!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Cards in stack: ", "".concat(this.state.stack.length, " cards")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Cards burned: ", "".concat(this.state.burned, " cards")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "players"
+      }, "Players:", this.state.players.map(function (player) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           key: player.socketId
-        }, "Player ", player.socketId, " has ", player.hand.length, " cards in their hand!");
-      })), this.state.currentPlayer && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "It is", ' ', this.state.currentPlayer.socketId === this.state.user ? 'your' : "".concat(this.state.currentPlayer.socketId, "'s"), ' ', "turn!")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.state.topCard !== 0 && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Top Card: ", this.state.topCard.value, " of ", this.state.topCard.suit), this.state.start && this.state.currentPlayer && this.state.currentPlayer.socketId === this.state.user && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        }, player.alias, " has ", player.hand.length, " cards in their hand!");
+      })))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "game"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "card-view"
+      }, this.state.topCard !== 0 && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+        src: "./".concat(this.state.topCard.img, ".png")
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "buttons"
+      }, this.state.start && this.state.currentPlayer && this.state.currentPlayer.socketId === this.state.user && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
         onClick: function onClick() {
           return _socket__WEBPACK_IMPORTED_MODULE_1__["default"].emit('playcard');
@@ -211,11 +231,15 @@ function (_React$Component) {
         onClick: function onClick() {
           return _socket__WEBPACK_IMPORTED_MODULE_1__["default"].emit('start');
         }
-      }, "Start!")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ol", null, this.state.messages.length ? this.state.messages.map(function (msg) {
+      }, "Start!"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "log-container"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ol", {
+        id: "log"
+      }, this.state.messages.length ? this.state.messages.map(function (msg) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
           key: msg.id
-        }, msg.message);
-      }) : ''));
+        }, "".concat(msg.message));
+      }) : '')));
     }
   }]);
 
@@ -40488,7 +40512,7 @@ if (false) {} else {
 /*!***************************************************************!*\
   !*** ./node_modules/react-router-dom/esm/react-router-dom.js ***!
   \***************************************************************/
-/*! exports provided: BrowserRouter, HashRouter, Link, NavLink, MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext */
+/*! exports provided: MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext, BrowserRouter, HashRouter, Link, NavLink */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

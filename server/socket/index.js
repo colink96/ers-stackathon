@@ -16,7 +16,9 @@ function updateInfo(io) {
     players: game.players,
     currentPlayer: game.currentPlayer(),
     topCard: game.stack.length && game.stack[game.stack.length - 1],
-    messages: game.msgLog
+    messages: game.msgLog,
+    stack: game.stack,
+    burned: game.burn.length
   })
 }
 
@@ -26,7 +28,10 @@ module.exports = io => {
     if (!game.players.map(player => player.socketId).includes(socket.id)) {
       game.addPlayer(new Player(socket.id))
     }
-    io.to(`${socket.id}`).emit('user', socket.id)
+    io.to(`${socket.id}`).emit('user', {
+      id: socket.id,
+      alias: game.getPlayer(socket.id).alias
+    })
     updateInfo(io)
     console.log(`${game.players.length} players in the house!`)
 
