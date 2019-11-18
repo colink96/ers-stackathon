@@ -37,6 +37,7 @@ function Player(socketId) {
   this.socketId = socketId
   this.hand = []
   this.alias = genAlias()
+  this.slapped = false
 }
 
 function buildDeck() {
@@ -162,8 +163,10 @@ class Game {
   }
 
   slap(player) {
-    this.log(`${player.alias} slaps`)
-    if (this.isValidSlap()) {
+    if (player.slapped) {
+      this.log('You already slapped this round!')
+    } else if (this.isValidSlap()) {
+      this.log(`${player.alias} slaps`)
       this.stack = this.stack.map(card => {
         card.owner = player.socketId
         return card
@@ -183,29 +186,19 @@ class Game {
       )
       this.burn.push(burnCard)
     }
-  }
-
-  awardWinner() {
-    if (this.checkWinner()) {
-      let winner = this.players.filter(user => {
-        return this.checkWinner() === user.socketId
-      })[0]
-      this.stack = this.stack.map(card => {
-        card.owner = this.checkWinner()
-        return card
-      })
-      this.log(`${winner.alias} wins this round.`)
-      this.stack.push(...this.burn)
-      this.burn = []
-      winner.hand.unshift(...this.stack)
-      this.stack = []
+    player.slapped = true
+    if (!player.hand.length) {
+      this.dequeue(player.socketId)
     }
-    this.players.forEach(player => {
-      if (player.hand.length === 52) {
-        this.log(`${player.alias} wins the game!`)
-        this.end()
-      }
-    })
+    if (this.burn.length + this.stack.length === 52) {
+      this.end()
+    }
+    if (!this.turnQueue.length) {
+      this.end()
+    }
+    if (this.turnQueue.length === 1) {
+      this.end()
+    }
   }
 
   dealHands() {
@@ -314,6 +307,7 @@ class Game {
         player.hand.length > 0
       ) {
         this.queue(player)
+        player.slapped = false
       } else if (player.hand.length < 1) {
         this.dequeue(player.socketId)
       }
