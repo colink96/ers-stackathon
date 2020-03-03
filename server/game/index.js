@@ -127,6 +127,10 @@ class Game {
 
   addPlayer(player) {
     this.players.push(player)
+    this.log(`Welcome, ${player.alias}!`)
+    if (this.players.length < 2) {
+      this.log('Not enough players, waiting for more players to join...')
+    }
   }
 
   removePlayer(socketId) {
