@@ -8,8 +8,10 @@
 
 # About
 
-Rats! is a simple webapp that allows users to play the card game ERS (Egyptian Rat Screw) a.k.a. Egyptian War with realtime online multiplayer.
-It is built using the following technologies:
+Rats! is a simple webapp that allows users to play the card game ERS (Egyptian Rat Screw) a.k.a. Egyptian War with realtime online multiplayer. All of the game logic was written from scratch in Node.js without the use of any outside libraries.
+
+# Stack
+Rats! is built using the following technologies:
 
 - Javascript
 - React
