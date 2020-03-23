@@ -28,7 +28,7 @@ form div {
   align-self: center;
   justify-self: center;
   align-content: center;
-  margin-top: 10%;
+  margin-top: 15%;
 }
 
 .card-view img {
@@ -43,8 +43,11 @@ form div {
 
 #main {
   display: flex;
+  /* flex-direction: column; */
   flex-wrap: wrap;
   height: 500px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #main h1 {
@@ -54,8 +57,8 @@ form div {
   text-align: center;
 }
 #header {
-  padding: 1%;
-  flex: 2;
+  padding: 5px;
+  width: 250px;
   background-color: #429ea6;
   border-bottom-left-radius: 5px;
   border-top-left-radius: 5px;
@@ -63,9 +66,10 @@ form div {
 
 #game {
   display: flex;
-  flex: 2;
+  padding: 5px;
   justify-items: center;
   flex-direction: column;
+  width: 250px;
   background-color: #22223b;
 }
 #players {
@@ -82,8 +86,9 @@ form div {
 }
 
 #log-container {
+  padding: 5px;
   align-self: right;
-  width: 30%;
+  width: 250px;
   background-color: #153b50;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
@@ -93,6 +98,7 @@ form div {
   align-self: center;
   justify-content: space-evenly;
   padding-bottom: 5%;
+  margin-top: 10px;
 }
 
 #buttons button {
@@ -116,11 +122,17 @@ h3 {
   text-align: center;
 }
 
+h4 {
+  align-self: center;
+  text-align: center;
+}
+
 #howtoplay {
   border-radius: 5px;
+  width: 765px;
   padding: 1%;
-  margin: 5%;
   background-color: #153b50;
+  margin-top: 20px;
 }
 
 @keyframes slappable {

@@ -68,10 +68,10 @@ class Home extends React.Component {
             )}
             {this.state.currentPlayer && (
               <div>
-                <h3>
+                <h4>
                   {this.state.messages.length &&
                     this.state.messages[this.state.messages.length - 1].message}
-                </h3>
+                </h4>
                 {!this.state.winner && (
                   <h3>
                     It is{' '}

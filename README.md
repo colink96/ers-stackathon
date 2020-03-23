@@ -29,4 +29,4 @@ It is built using the following technologies:
 - Chatting feature
 - Multiple game lobbies
 - Multiple decks
-- Styling
+- Styling for mobile
