@@ -18,7 +18,8 @@ function updateInfo(io) {
     topCard: game.stack.length && game.stack[game.stack.length - 1],
     messages: game.msgLog,
     stack: game.stack,
-    burned: game.burn.length
+    burned: game.burn.length,
+    slappable: game.isValidSlap()
   })
 }
 

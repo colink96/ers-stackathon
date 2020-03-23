@@ -141,6 +141,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
+/* eslint-disable complexity */
 
 
 
@@ -165,7 +166,8 @@ function (_React$Component) {
       topCard: {},
       messages: [],
       stack: [],
-      burned: 0
+      burned: 0,
+      slappable: false
     };
     return _this;
   }
@@ -189,7 +191,8 @@ function (_React$Component) {
           topCard: game.topCard,
           messages: game.messages,
           stack: game.stack,
-          burned: game.burned
+          burned: game.burned,
+          slappable: game.slappable
         });
       });
     }
@@ -210,22 +213,28 @@ function (_React$Component) {
         }, player.alias, " has ", player.hand.length, " cards in their hand!");
       })))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: "game"
-      }, this.state.currentPlayer && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "It is", ' ', this.state.currentPlayer.socketId === this.state.user ? 'your' : "".concat(this.state.currentPlayer.alias, "'s"), ' ', "turn!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "notification"
+      }, this.state.players.length > 1 ? '' : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Not enough players to start."), this.state.currentPlayer && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, this.state.messages.length && this.state.messages[this.state.messages.length - 1].message), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "It is", ' ', this.state.currentPlayer.socketId === this.state.user ? 'your' : "".concat(this.state.currentPlayer.alias, "'s"), ' ', "turn!"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card-view"
       }, this.state.topCard !== 0 && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
         src: "./".concat(this.state.topCard.img, ".png")
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: "buttons"
-      }, this.state.start && this.state.currentPlayer && this.state.currentPlayer.socketId === this.state.user && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }, this.state.start && this.state.currentPlayer && this.state.currentPlayer.socketId === this.state.user ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
         onClick: function onClick() {
           return _socket__WEBPACK_IMPORTED_MODULE_1__["default"].emit('playcard');
         }
+      }, "Play Card") : this.state.start && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        disabled: true
       }, "Play Card"), this.state.start && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
         onClick: function onClick() {
           return _socket__WEBPACK_IMPORTED_MODULE_1__["default"].emit('slap');
-        }
+        },
+        className: this.state.slappable ? 'slappable' : ''
       }, "Slap!"), this.state.players.length >= 2 && !this.state.start && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
         onClick: function onClick() {
@@ -233,7 +242,7 @@ function (_React$Component) {
         }
       }, "Start!"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: "log-container"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ol", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Game Messages:"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ol", {
         id: "log"
       }, this.state.messages.length ? this.state.messages.map(function (msg) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
@@ -40514,7 +40523,7 @@ if (false) {} else {
 /*!***************************************************************!*\
   !*** ./node_modules/react-router-dom/esm/react-router-dom.js ***!
   \***************************************************************/
-/*! exports provided: BrowserRouter, HashRouter, Link, NavLink, MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext */
+/*! exports provided: MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext, BrowserRouter, HashRouter, Link, NavLink */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

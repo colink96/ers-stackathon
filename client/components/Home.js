@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import React from 'react'
 import socket from '../socket'
 import {runInThisContext} from 'vm'
@@ -14,10 +15,10 @@ class Home extends React.Component {
       topCard: {},
       messages: [],
       stack: [],
-      burned: 0
+      burned: 0,
+      slappable: false
     }
   }
-
   componentDidMount() {
     socket.on('user', info => {
       this.setState({user: info.id, alias: info.alias})
@@ -31,7 +32,8 @@ class Home extends React.Component {
         topCard: game.topCard,
         messages: game.messages,
         stack: game.stack,
-        burned: game.burned
+        burned: game.burned,
+        slappable: game.slappable
       })
     })
   }
@@ -42,7 +44,6 @@ class Home extends React.Component {
           <h1>Rats!</h1>
           <div id="game-info">
             <h2>You are: {this.state.alias}</h2>
-
             <h2>Cards in stack: {`${this.state.stack.length} cards`}</h2>
             <h2>Cards burned: {`${this.state.burned} cards`}</h2>
             <div id="players">
@@ -57,15 +58,28 @@ class Home extends React.Component {
         </div>
 
         <div id="game">
-          {this.state.currentPlayer && (
-            <h3>
-              It is{' '}
-              {this.state.currentPlayer.socketId === this.state.user
-                ? 'your'
-                : `${this.state.currentPlayer.alias}'s`}{' '}
-              turn!
-            </h3>
-          )}
+          <div id="notification">
+            {this.state.players.length > 1 ? (
+              ''
+            ) : (
+              <h3>Not enough players to start.</h3>
+            )}
+            {this.state.currentPlayer && (
+              <div>
+                <h3>
+                  {this.state.messages.length &&
+                    this.state.messages[this.state.messages.length - 1].message}
+                </h3>
+                <h3>
+                  It is{' '}
+                  {this.state.currentPlayer.socketId === this.state.user
+                    ? 'your'
+                    : `${this.state.currentPlayer.alias}'s`}{' '}
+                  turn!
+                </h3>
+              </div>
+            )}
+          </div>
           <div className="card-view">
             {this.state.topCard !== 0 && (
               <img src={`./${this.state.topCard.img}.png`} />
@@ -73,14 +87,24 @@ class Home extends React.Component {
           </div>
           <div id="buttons">
             {this.state.start &&
-              this.state.currentPlayer &&
-              this.state.currentPlayer.socketId === this.state.user && (
-                <button type="button" onClick={() => socket.emit('playcard')}>
+            this.state.currentPlayer &&
+            this.state.currentPlayer.socketId === this.state.user ? (
+              <button type="button" onClick={() => socket.emit('playcard')}>
+                Play Card
+              </button>
+            ) : (
+              this.state.start && (
+                <button type="button" disabled>
                   Play Card
                 </button>
-              )}
+              )
+            )}
             {this.state.start && (
-              <button type="button" onClick={() => socket.emit('slap')}>
+              <button
+                type="button"
+                onClick={() => socket.emit('slap')}
+                className={this.state.slappable ? 'slappable' : ''}
+              >
                 Slap!
               </button>
             )}
@@ -92,6 +116,7 @@ class Home extends React.Component {
           </div>
         </div>
         <div id="log-container">
+          <h3>Game Messages:</h3>
           <ol id="log">
             {this.state.messages.length
               ? this.state.messages.map(msg => {

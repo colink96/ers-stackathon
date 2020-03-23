@@ -128,9 +128,6 @@ class Game {
   addPlayer(player) {
     this.players.push(player)
     this.log(`Welcome, ${player.alias}!`)
-    if (this.players.length < 2) {
-      this.log('Not enough players, waiting for more players to join...')
-    }
   }
 
   removePlayer(socketId) {
@@ -149,36 +146,24 @@ class Game {
     }
   }
 
-  isValidSlap(player) {
-    this.log(`${player.alias} slaps!`)
+  isValidSlap() {
     let topCard = this.stack[this.stack.length - 1]
     if (!this.stack[this.stack.length - 2]) {
-      this.log(`Invalid sandwich.`)
       return false
     } else if (topCard.value === this.stack[this.stack.length - 2].value) {
-      this.log(
-        `Valid sandwich: ${topCard.value}, ${
-          this.stack[this.stack.length - 2].value
-        }.`
-      )
       return true
     } else if (this.stack[this.stack.length - 3]) {
       if (topCard.value === this.stack[this.stack.length - 3].value) {
-        this.log(
-          `Valid sandwich: ${topCard.value}, ${
-            this.stack[this.stack.length - 2].value
-          }, ${this.stack[this.stack.length - 3].value}.`
-        )
         return true
       }
     } else {
-      this.log(`Invalid sandwich.`)
       return false
     }
   }
 
   slap(player) {
-    if (this.isValidSlap(player)) {
+    this.log(`${player.alias} slaps!`)
+    if (this.isValidSlap()) {
       this.stack = this.stack.map(card => {
         card.owner = player.socketId
         return card
@@ -195,7 +180,7 @@ class Game {
     } else if (player.hand.length) {
       let burnCard = player.hand.pop()
       this.log(
-        `${this.getPlayer(player.socketId).alias} burns a card: ${
+        `Invalid slap! ${this.getPlayer(player.socketId).alias} burns a card: ${
           burnCard.value
         }`
       )
@@ -318,25 +303,33 @@ class Game {
       switch (this.stack[this.stack.length - 1].value) {
         case 'Jack':
           this.log(
-            `Jack: ${nextPlayer.alias} has 1 chance to play a face card.`
+            `${this.getPlayer(currentPlayerId).alias} plays a Jack: ${
+              nextPlayer.alias
+            } has 1 chance to play a face card.`
           )
           break
         case 'Queen':
           this.log(
-            `Queen: ${nextPlayer.alias} has 2 chances to play a face card.`
+            `${this.getPlayer(currentPlayerId).alias} plays a Queen: ${
+              nextPlayer.alias
+            } has 2 chances to play a face card.`
           )
           this.turnQueue.push(nextPlayer)
           break
         case 'King':
           this.log(
-            `King: ${nextPlayer.alias} has 3 chances to play a face card.`
+            `${this.getPlayer(currentPlayerId).alias} plays a King: ${
+              nextPlayer.alias
+            } has 3 chances to play a face card.`
           )
           this.turnQueue.push(nextPlayer)
           this.turnQueue.push(nextPlayer)
           break
         case 'Ace':
           this.log(
-            `Ace: ${nextPlayer.alias} has 4 chances to play a face card.`
+            `${this.getPlayer(currentPlayerId).alias} plays an Ace: ${
+              nextPlayer.alias
+            } has 4 chances to play a face card.`
           )
           this.turnQueue.push(nextPlayer)
           this.turnQueue.push(nextPlayer)
@@ -386,9 +379,6 @@ class Game {
 
   log(msg) {
     this.msgLog.push({message: msg, id: Math.random() * 9999})
-    if (this.msgLog.length > 30) {
-      this.msgLog = this.msgLog.slice(1)
-    }
   }
 }
 
