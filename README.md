@@ -4,7 +4,7 @@
 
 #### House rules: Only doubles and sandwiches are valid slaps, face card rules remain the same.
 
-### Start playing here: egyptian-rats-stack.herokuapp.com
+### Start playing here: https://egyptian-rats-stack.herokuapp.com/
 
 # About
 
