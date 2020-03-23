@@ -19,7 +19,8 @@ function updateInfo(io) {
     messages: game.msgLog,
     stack: game.stack,
     burned: game.burn.length,
-    slappable: game.isValidSlap()
+    slappable: game.isValidSlap(),
+    winner: game.checkWinner()
   })
 }
 

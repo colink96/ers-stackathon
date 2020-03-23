@@ -167,7 +167,8 @@ function (_React$Component) {
       messages: [],
       stack: [],
       burned: 0,
-      slappable: false
+      slappable: false,
+      winner: undefined
     };
     return _this;
   }
@@ -192,7 +193,8 @@ function (_React$Component) {
           messages: game.messages,
           stack: game.stack,
           burned: game.burned,
-          slappable: game.slappable
+          slappable: game.slappable,
+          winner: game.winner
         });
       });
     }
@@ -215,13 +217,13 @@ function (_React$Component) {
         id: "game"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: "notification"
-      }, this.state.players.length > 1 ? '' : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Not enough players to start."), this.state.currentPlayer && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, this.state.messages.length && this.state.messages[this.state.messages.length - 1].message), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "It is", ' ', this.state.currentPlayer.socketId === this.state.user ? 'your' : "".concat(this.state.currentPlayer.alias, "'s"), ' ', "turn!"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, this.state.players.length > 1 ? '' : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Not enough players to start."), this.state.currentPlayer && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, this.state.messages.length && this.state.messages[this.state.messages.length - 1].message), !this.state.winner && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "It is", ' ', this.state.currentPlayer.socketId === this.state.user ? 'your' : "".concat(this.state.currentPlayer.alias, "'s"), ' ', "turn!"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card-view"
       }, this.state.topCard !== 0 && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
         src: "./".concat(this.state.topCard.img, ".png")
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: "buttons"
-      }, this.state.start && this.state.currentPlayer && this.state.currentPlayer.socketId === this.state.user ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }, this.state.start && !this.state.winner && this.state.currentPlayer && this.state.currentPlayer.socketId === this.state.user ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
         onClick: function onClick() {
           return _socket__WEBPACK_IMPORTED_MODULE_1__["default"].emit('playcard');
@@ -234,7 +236,7 @@ function (_React$Component) {
         onClick: function onClick() {
           return _socket__WEBPACK_IMPORTED_MODULE_1__["default"].emit('slap');
         },
-        className: this.state.slappable ? 'slappable' : ''
+        className: this.state.slappable ? 'slappable' : this.state.winner === this.state.user ? 'slappable' : ''
       }, "Slap!"), this.state.players.length >= 2 && !this.state.start && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
         onClick: function onClick() {

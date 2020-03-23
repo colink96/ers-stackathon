@@ -16,7 +16,8 @@ class Home extends React.Component {
       messages: [],
       stack: [],
       burned: 0,
-      slappable: false
+      slappable: false,
+      winner: undefined
     }
   }
   componentDidMount() {
@@ -33,7 +34,8 @@ class Home extends React.Component {
         messages: game.messages,
         stack: game.stack,
         burned: game.burned,
-        slappable: game.slappable
+        slappable: game.slappable,
+        winner: game.winner
       })
     })
   }
@@ -70,13 +72,15 @@ class Home extends React.Component {
                   {this.state.messages.length &&
                     this.state.messages[this.state.messages.length - 1].message}
                 </h3>
-                <h3>
-                  It is{' '}
-                  {this.state.currentPlayer.socketId === this.state.user
-                    ? 'your'
-                    : `${this.state.currentPlayer.alias}'s`}{' '}
-                  turn!
-                </h3>
+                {!this.state.winner && (
+                  <h3>
+                    It is{' '}
+                    {this.state.currentPlayer.socketId === this.state.user
+                      ? 'your'
+                      : `${this.state.currentPlayer.alias}'s`}{' '}
+                    turn!
+                  </h3>
+                )}
               </div>
             )}
           </div>
@@ -87,6 +91,7 @@ class Home extends React.Component {
           </div>
           <div id="buttons">
             {this.state.start &&
+            !this.state.winner &&
             this.state.currentPlayer &&
             this.state.currentPlayer.socketId === this.state.user ? (
               <button type="button" onClick={() => socket.emit('playcard')}>
@@ -103,7 +108,13 @@ class Home extends React.Component {
               <button
                 type="button"
                 onClick={() => socket.emit('slap')}
-                className={this.state.slappable ? 'slappable' : ''}
+                className={
+                  this.state.slappable
+                    ? 'slappable'
+                    : this.state.winner === this.state.user
+                    ? 'slappable'
+                    : ''
+                }
               >
                 Slap!
               </button>

@@ -1,3 +1,4 @@
+/* eslint-disable max-statements */
 /* eslint-disable no-extend-native */
 /* eslint-disable complexity */
 
@@ -163,7 +164,21 @@ class Game {
 
   slap(player) {
     this.log(`${player.alias} slaps!`)
-    if (this.isValidSlap()) {
+    if (player.socketId === this.checkWinner()) {
+      this.stack = this.stack.map(card => {
+        card.owner = player.socketId
+        return card
+      })
+      this.log(`${player.alias} collected their winnings.`)
+      this.stack.push(...this.burn)
+      this.burn = []
+      while (this.stack.length) {
+        player.hand.unshift(this.stack.pop())
+      }
+      let current = this.currentPlayer().socketId
+      this.dequeue(current)
+      this.queue(this.getPlayer(current))
+    } else if (this.isValidSlap()) {
       this.stack = this.stack.map(card => {
         card.owner = player.socketId
         return card
@@ -374,7 +389,13 @@ class Game {
       } of ${this.stack[this.stack.length - 1].suit}`
     )
     this.validateQueue()
-    this.awardWinner()
+    if (this.checkWinner()) {
+      this.log(
+        `${
+          this.getPlayer(this.checkWinner()).alias
+        } wins this round. Slap to collect your winnings.`
+      )
+    }
   }
 
   log(msg) {
